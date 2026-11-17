@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Kitchen Timer Card">
+  <rect width="512" height="512" rx="112" fill="#2b2b2b"/>
+  <rect x="222" y="82" width="68" height="30" rx="12" fill="#ffa726"/>
+  <rect x="240" y="108" width="32" height="34" fill="#ffa726"/>
+  <circle cx="256" cy="288" r="148" fill="#ffa726"/>
+  <circle cx="358" cy="288" r="9" fill="#2b2b2b"/>
+  <circle cx="256" cy="390" r="9" fill="#2b2b2b"/>
+  <circle cx="154" cy="288" r="9" fill="#2b2b2b"/>
+  <path d="M256 288 V216 M256 288 L306 318" fill="none" stroke="#2b2b2b" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="256" cy="288" r="17" fill="#2b2b2b"/>
+</svg>
