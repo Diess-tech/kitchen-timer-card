@@ -12,7 +12,7 @@
 ## Releasing
 - Bump `KTC_VERSION` in the JS, commit, tag `vX.Y.Z`, create a GitHub release (HACS reads releases). Owner creates the release by hand (Claude cannot create tags).
 - On every published release a workflow (`.github/workflows/allega-alla-release.yml`) attaches `kitchen-timer-card.js` to it, so HACS downloads count. It can also be run by hand for an existing tag (Actions > Run workflow). If it fails on permissions: Settings > Actions > General > Workflow permissions > Read and write.
-- The `Validate` workflow (HACS check) needs the repository **description** and **topics** set on GitHub (About > gear icon), otherwise it fails.
+- There is no HACS validation workflow (removed on purpose, to match the outlet card). To run the official check by hand, add `hacs/action@main` with `category: plugin` and set description and topics on GitHub first.
 - README preview (`preview.png`) is in English, made from the real card with example data (not from the owner's HA). HACS shows the README of the release, so a README change needs a new release.
 
 ## Commits
