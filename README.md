@@ -1,5 +1,16 @@
 # Kitchen Timer Card
 
+<p align="center"><img src="https://raw.githubusercontent.com/Diess-tech/kitchen-timer-card/main/assets/logo.png" alt="Kitchen Timer Card logo" width="128" height="128"></p>
+
+[![hacs](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Diess-tech&repository=kitchen-timer-card&category=plugin)
+[![release](https://img.shields.io/github/v/release/Diess-tech/kitchen-timer-card)](https://github.com/Diess-tech/kitchen-timer-card/releases)
+[![downloads](https://img.shields.io/github/downloads/Diess-tech/kitchen-timer-card/total)](https://github.com/Diess-tech/kitchen-timer-card/releases)
+[![license](https://img.shields.io/github/license/Diess-tech/kitchen-timer-card)](LICENSE)
+
+<a href="https://buymeacoffee.com/diesstech"><img src="https://raw.githubusercontent.com/Diess-tech/kitchen-timer-card/main/assets/donate-buymeacoffee.svg" alt="Buy me a coffee" width="240" height="50"></a>
+<a href="https://ko-fi.com/diesstech"><img src="https://raw.githubusercontent.com/Diess-tech/kitchen-timer-card/main/assets/donate-kofi.svg" alt="Support me on Ko-fi" width="240" height="50"></a>
+<a href="https://paypal.me/diesstech"><img src="https://raw.githubusercontent.com/Diess-tech/kitchen-timer-card/main/assets/donate-paypal.svg" alt="Donate with PayPal" width="240" height="50"></a>
+
 A Home Assistant dashboard card for **one-tap cooking timers**: tap *Spaghetti* and a 9-minute timer starts. It's made for a tablet in the kitchen, but it works anywhere.
 
 ![preview](preview.png)
