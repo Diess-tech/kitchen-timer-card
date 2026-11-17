@@ -26,7 +26,12 @@ A Home Assistant dashboard card for **one-tap cooking timers**: tap *Spaghetti* 
 ## Installation
 
 ### HACS (custom repository)
-1. Open HACS → ⋮ → **Custom repositories**.
+
+[![Open your Home Assistant instance and open this repository in HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Diess-tech&repository=kitchen-timer-card&category=plugin)
+
+Click the button above, or do it by hand:
+
+1. HACS → ⋮ → **Custom repositories**.
 2. Add `https://github.com/Diess-tech/kitchen-timer-card` with category **Dashboard**.
 3. Install **Kitchen Timer Card**, then reload the browser.
 

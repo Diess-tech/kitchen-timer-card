@@ -4,7 +4,7 @@
  * https://github.com/Diess-tech/kitchen-timer-card
  * MIT License - (c) 2026 Davide Sanna
  */
-const KTC_VERSION = "0.1.0";
+const KTC_VERSION = "0.1.1";
 
 const KTC_COLORS = {
   amber: "#ffca28", orange: "#ffa726", "deep-orange": "#ff7043", red: "#ef5350",
