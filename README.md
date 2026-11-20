@@ -16,6 +16,8 @@ A Home Assistant dashboard card for **one-tap cooking timers**: tap *Spaghetti* 
 ![preview](preview.png)
 
 - **Ready-made buttons** grouped by type (eggs, pasta, rice…), with an icon and a colour for each group. Change the list or leave the built-in one, available in English and Italian.
+- **More options one tap away**: each group shows the everyday buttons, and a *more* button opens the rest (linguine, farfalle, paccheri, basmati rice…).
+- **Beef steak** by thickness: pick the thickness in cm and *rare*, *medium* or *well done*. The timer name tells you when to flip it.
 - Several timers can run at once. Each tap uses the **first free timer**.
 - Each running timer shows a **big countdown**, the time it will be ready, a progress bar and the buttons **−1 min, +1 min, pause/resume and cancel**.
 - A **custom timer** with any number of minutes and an optional name.
@@ -99,6 +101,23 @@ presets:
 
 `minutes` can be a decimal number, for example `2.5`.
 
+Buttons listed under `more` stay hidden until you tap *more* next to the group name:
+
+```yaml
+presets:
+  - group: Pasta
+    color: orange
+    items:
+      - { name: Spaghetti, minutes: 9, icon: mdi:pasta }
+    more:
+      - { name: Paccheri, minutes: 13, icon: mdi:pasta }
+  - type: steak                 # the beef steak row (thickness + rare / medium / well done)
+    group: Beef steak
+    color: red
+```
+
+With your own `presets`, the steak row appears only if you add the `type: steak` group.
+
 ## Voice announcement when a timer ends (example automation)
 
 The beep only plays in an open browser. To be told on a speaker, use the timer events:
@@ -130,12 +149,14 @@ actions:
 - **Sound on tablets:** browsers allow sound only after you have touched the page. The first tap on the card unlocks it.
 - **+1 minute** restarts the timer with the new remaining time. Home Assistant's `timer.change` refuses to go beyond the original duration, so the card doesn't use it.
 - When all timers are busy, the card shows a short message and starts nothing.
+- **Steak times are indicative**, for a very hot pan, per side by thickness (1 to 5 cm), taken from butcher and cookery guides. Pan, cut and starting temperature change them a lot: a meat thermometer is the only sure way. Burgers and minced meat must always be cooked through. Flip the steak when the countdown shows the time written in its name (it is half of the total).
+- Pasta times are indicative too: check the package.
 
 ---
 
 ## 🇮🇹 In breve
 
-Card per Home Assistant con **timer da cucina a un tocco**: tocchi *Spaghetti* e parte un timer da 9 minuti. Ha i tempi pronti per uova, pasta, riso e altro, che puoi personalizzare, più un timer libero. Mostra un grande conto alla rovescia con i pulsanti −1/+1 minuto, pausa e annulla, e alla fine l'avviso "pronto!" con un bip. Usa i timer di Home Assistant, quindi le automazioni possono annunciare a voce cosa è pronto. La lingua italiana si attiva da sola se Home Assistant è in italiano.
+Card per Home Assistant con **timer da cucina a un tocco**: tocchi *Spaghetti* e parte un timer da 9 minuti. Ha i tempi pronti per uova, pasta, riso e altro, che puoi personalizzare: quelli di tutti i giorni sono in vista, gli altri si aprono con il tasto «altre». C'è una riga per la bistecca di manzo: scegli lo spessore e la cottura (al sangue, media, ben cotta) e il nome del timer ti dice quando girarla. I tempi sono indicativi. Più un timer libero. Mostra un grande conto alla rovescia con i pulsanti −1/+1 minuto, pausa e annulla, e alla fine l'avviso "pronto!" con un bip. Usa i timer di Home Assistant, quindi le automazioni possono annunciare a voce cosa è pronto. La lingua italiana si attiva da sola se Home Assistant è in italiano.
 
 ## License
 MIT © 2026 Davide Sanna

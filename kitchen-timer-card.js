@@ -4,7 +4,7 @@
  * https://github.com/Diess-tech/kitchen-timer-card
  * MIT License - (c) 2026 Davide Sanna
  */
-const KTC_VERSION = "0.1.1";
+const KTC_VERSION = "0.2.0";
 
 const KTC_COLORS = {
   amber: "#ffca28", orange: "#ffa726", "deep-orange": "#ff7043", red: "#ef5350",
@@ -31,11 +31,22 @@ const KTC_I18N = {
     no_timers: "Add at least one timer helper to the card configuration (timers:).",
     missing: (e) => `Entity not found: ${e}`,
     dismiss: "OK",
+    more: (n) => `${n} more`,
+    less: "less",
+    thickness: "Thickness",
+    steak_levels: { rare: "Rare", medium: "Medium", well: "Well done" },
+    steak_label: (lvl, cm, flip) => `Steak ${lvl.toLowerCase()} ${cm} cm · flip at ${flip}`,
+    steak_note: "Indicative times for a very hot pan. Flip the steak when the timer shows the time on the button, then let it rest a few minutes. A meat thermometer is the only sure way. Burgers and minced meat must always be well done.",
+    flip: "flip at",
     presets: [
       { group: "Eggs", color: "amber", items: [
         { name: "Soft-boiled", label: "Soft-boiled eggs", minutes: 3, icon: "mdi:egg-outline" },
         { name: "Medium", label: "Medium-boiled eggs", minutes: 6, icon: "mdi:egg-fried" },
         { name: "Hard-boiled", label: "Hard-boiled eggs", minutes: 9, icon: "mdi:egg" },
+      ], more: [
+        { name: "Poached", label: "Poached egg", minutes: 3, icon: "mdi:egg-outline" },
+        { name: "Mollet", label: "Mollet eggs", minutes: 5, icon: "mdi:egg-outline" },
+        { name: "Fried", label: "Fried egg", minutes: 4, icon: "mdi:egg-fried" },
       ]},
       { group: "Pasta", color: "orange", items: [
         { name: "Spaghetti", minutes: 9, icon: "mdi:pasta" },
@@ -44,13 +55,31 @@ const KTC_I18N = {
         { name: "Rigatoni", minutes: 12, icon: "mdi:pasta" },
         { name: "Fresh pasta", minutes: 3, icon: "mdi:noodles" },
         { name: "Gnocchi", minutes: 2, icon: "mdi:circle-multiple-outline" },
+      ], more: [
+        { name: "Linguine", minutes: 9, icon: "mdi:pasta" },
+        { name: "Bucatini", minutes: 10, icon: "mdi:pasta" },
+        { name: "Farfalle", minutes: 11, icon: "mdi:pasta" },
+        { name: "Mezze maniche", minutes: 11, icon: "mdi:pasta" },
+        { name: "Orecchiette", minutes: 12, icon: "mdi:pasta" },
+        { name: "Paccheri", minutes: 13, icon: "mdi:pasta" },
+        { name: "Egg tagliatelle", minutes: 6, icon: "mdi:noodles" },
+        { name: "Fresh ravioli", minutes: 4, icon: "mdi:noodles" },
       ]},
       { group: "Other", color: "light-green", items: [
         { name: "Rice", minutes: 17, icon: "mdi:rice" },
         { name: "Boiled vegetables", minutes: 12, icon: "mdi:carrot" },
         { name: "Boiled potatoes", minutes: 25, icon: "mdi:food-variant" },
         { name: "Pizza", minutes: 12, icon: "mdi:pizza" },
+      ], more: [
+        { name: "Basmati rice", minutes: 12, icon: "mdi:rice" },
+        { name: "Brown rice", minutes: 35, icon: "mdi:rice" },
+        { name: "Quinoa", minutes: 15, icon: "mdi:grain" },
+        { name: "Couscous", minutes: 5, icon: "mdi:grain" },
+        { name: "Broccoli", minutes: 6, icon: "mdi:sprout" },
+        { name: "Green beans", minutes: 8, icon: "mdi:sprout" },
+        { name: "Roast potatoes", minutes: 40, icon: "mdi:food-variant" },
       ]},
+      { type: "steak", group: "Beef steak", color: "red", icon: "mdi:food-steak" },
     ],
   },
   it: {
@@ -69,11 +98,22 @@ const KTC_I18N = {
     no_timers: "Aggiungi almeno un timer di Home Assistant nella configurazione della card (timers:).",
     missing: (e) => `Entità non trovata: ${e}`,
     dismiss: "OK",
+    more: (n) => `altre ${n}`,
+    less: "meno",
+    thickness: "Spessore",
+    steak_levels: { rare: "Al sangue", medium: "Media", well: "Ben cotta" },
+    steak_label: (lvl, cm, flip) => `Bistecca ${lvl.toLowerCase()} ${String(cm).replace(".", ",")} cm · gira a ${flip}`,
+    steak_note: "Tempi indicativi in padella ben calda. Gira la bistecca quando il timer segna il tempo scritto sul pulsante, poi lasciala riposare qualche minuto. L'unico modo sicuro è il termometro. Hamburger e carne macinata vanno sempre cotti bene.",
+    flip: "gira a",
     presets: [
       { group: "Uova", color: "amber", items: [
         { name: "Alla coque", label: "Uova alla coque", minutes: 3, icon: "mdi:egg-outline" },
         { name: "Bazzotte", label: "Uova bazzotte", minutes: 6, icon: "mdi:egg-fried" },
         { name: "Sode", label: "Uova sode", minutes: 9, icon: "mdi:egg" },
+      ], more: [
+        { name: "In camicia", label: "Uovo in camicia", minutes: 3, icon: "mdi:egg-outline" },
+        { name: "Mollet", label: "Uova mollet", minutes: 5, icon: "mdi:egg-outline" },
+        { name: "All'occhio di bue", label: "Uovo all'occhio di bue", minutes: 4, icon: "mdi:egg-fried" },
       ]},
       { group: "Pasta", color: "orange", items: [
         { name: "Spaghetti", minutes: 9, icon: "mdi:pasta" },
@@ -82,16 +122,61 @@ const KTC_I18N = {
         { name: "Rigatoni", minutes: 12, icon: "mdi:pasta" },
         { name: "Pasta fresca", minutes: 3, icon: "mdi:noodles" },
         { name: "Gnocchi", minutes: 2, icon: "mdi:circle-multiple-outline" },
+      ], more: [
+        { name: "Linguine", minutes: 9, icon: "mdi:pasta" },
+        { name: "Bucatini", minutes: 10, icon: "mdi:pasta" },
+        { name: "Farfalle", minutes: 11, icon: "mdi:pasta" },
+        { name: "Mezze maniche", minutes: 11, icon: "mdi:pasta" },
+        { name: "Orecchiette", minutes: 12, icon: "mdi:pasta" },
+        { name: "Paccheri", minutes: 13, icon: "mdi:pasta" },
+        { name: "Tagliatelle all'uovo", minutes: 6, icon: "mdi:noodles" },
+        { name: "Ravioli freschi", minutes: 4, icon: "mdi:noodles" },
       ]},
       { group: "Altro", color: "light-green", items: [
         { name: "Riso", minutes: 17, icon: "mdi:rice" },
         { name: "Verdure lesse", minutes: 12, icon: "mdi:carrot" },
         { name: "Patate lesse", minutes: 25, icon: "mdi:food-variant" },
         { name: "Pizza in forno", label: "Pizza", minutes: 12, icon: "mdi:pizza" },
+      ], more: [
+        { name: "Riso basmati", minutes: 12, icon: "mdi:rice" },
+        { name: "Riso integrale", minutes: 35, icon: "mdi:rice" },
+        { name: "Quinoa", minutes: 15, icon: "mdi:grain" },
+        { name: "Cous cous", minutes: 5, icon: "mdi:grain" },
+        { name: "Broccoli", minutes: 6, icon: "mdi:sprout" },
+        { name: "Fagiolini", minutes: 8, icon: "mdi:sprout" },
+        { name: "Patate al forno", minutes: 40, icon: "mdi:food-variant" },
       ]},
+      { type: "steak", group: "Bistecca di manzo", color: "red", icon: "mdi:food-steak" },
     ],
   },
 };
+
+// Beef steak in a very hot pan: minutes PER SIDE by thickness (cm), interpolated in between.
+// Indicative values from butcher / cookery guides (see README); a meat thermometer is the reliable way.
+const KTC_STEAK = [
+  // cm, rare, medium, well done
+  [1, 1, 1.5, 2.5],
+  [1.5, 1.5, 2, 3],
+  [2, 2, 3, 4.5],
+  [2.5, 2.5, 4, 6],
+  [3, 3, 4.5, 6.5],
+  [4, 3.5, 5.5, 7.5],
+  [5, 4.5, 6.5, 9.5],
+];
+const KTC_STEAK_LEVELS = ["rare", "medium", "well"];
+function ktcSteakSide(cm, level) {
+  const col = KTC_STEAK_LEVELS.indexOf(level) + 1;
+  const t = KTC_STEAK;
+  const x = Math.min(t[t.length - 1][0], Math.max(t[0][0], Number(cm) || 2));
+  for (let i = 0; i < t.length - 1; i++) {
+    const a = t[i], b = t[i + 1];
+    if (x <= b[0]) {
+      const v = a[col] + (b[col] - a[col]) * (x - a[0]) / (b[0] - a[0]);
+      return Math.round(v * 2) / 2; // half minutes
+    }
+  }
+  return t[t.length - 1][col];
+}
 
 function ktcEsc(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -127,6 +212,9 @@ function ktcFmtDur(sec) {
   const pad = (n) => String(n).padStart(2, "0");
   return h ? `${h}:${pad(m)}:${pad(s)}` : `${pad(m)}:${pad(s)}`;
 }
+function ktcFmtNum(n) {
+  return String(n);
+}
 function ktcHms(sec) {
   sec = Math.max(1, Math.round(sec));
   const pad = (n) => String(n).padStart(2, "0");
@@ -142,7 +230,12 @@ class KitchenTimerCard extends HTMLElement {
     this._beeped = {};        // entity -> finishes_at already announced
     this._tick = this._tick.bind(this);
     this._onClick = this._onClick.bind(this);
+    this._open = new Set();   // preset groups showing their "more" items
+    this._thick = 2;          // steak thickness (cm)
     this.shadowRoot.addEventListener("click", this._onClick);
+    this.shadowRoot.addEventListener("input", (ev) => {
+      if (ev.target && ev.target.id === "ktc-thick") { this._thick = ev.target.value; this._updateSteak(); }
+    });
   }
 
   static getStubConfig(hass) {
@@ -277,8 +370,17 @@ class KitchenTimerCard extends HTMLElement {
     const a = el.dataset.action, e = el.dataset.entity;
     if (a === "preset") {
       const [g, i] = el.dataset.idx.split(".").map(Number);
-      const it = this._presets()[g].items[i];
-      this._start(it.label || it.name, it.minutes);
+      const it = this._groupItems(this._presets()[g])[i];
+      if (it) this._start(it.label || it.name, it.minutes);
+    } else if (a === "more") {
+      const g = Number(el.dataset.g);
+      if (this._open.has(g)) this._open.delete(g); else this._open.add(g);
+      this._render();
+    } else if (a === "steak") {
+      const cm = this._steakCm();
+      const side = ktcSteakSide(cm, el.dataset.level);
+      const T = this._t;
+      this._start(T.steak_label(T.steak_levels[el.dataset.level], cm, ktcFmtDur(side * 60)), side * 2);
     } else if (a === "custom") {
       const min = this.shadowRoot.getElementById("ktc-min");
       const nm = this.shadowRoot.getElementById("ktc-name");
@@ -397,6 +499,51 @@ class KitchenTimerCard extends HTMLElement {
     return Array.isArray(p) ? p : this._t.presets;
   }
 
+  // all the buttons of a group: the main ones, plus "more" when the group is open
+  _groupItems(g) {
+    return [...(g.items || []), ...(g.more || [])];
+  }
+
+  _steakCm() {
+    const v = parseFloat(String(this._thick).replace(",", "."));
+    return Math.min(5, Math.max(1, v > 0 ? Math.round(v * 2) / 2 : 2));
+  }
+
+  _updateSteak() {
+    const cm = this._steakCm();
+    KTC_STEAK_LEVELS.forEach((lvl) => {
+      const el = this.shadowRoot.getElementById("ktc-steak-" + lvl);
+      if (el) el.textContent = this._steakText(cm, lvl);
+    });
+  }
+
+  _steakText(cm, lvl) {
+    const side = ktcSteakSide(cm, lvl);
+    return `${ktcFmtNum(side * 2)} ${this._t.minutes} · ${this._t.flip} ${ktcFmtDur(side * 60)}`;
+  }
+
+  _steakHtml(g, gi) {
+    const T = this._t;
+    const hex = ktcHex(g.color, "red");
+    const cm = this._steakCm();
+    const btns = KTC_STEAK_LEVELS.map((lvl) => `
+      <button class="preset steak" data-action="steak" data-level="${lvl}"
+        style="background:${ktcRgba(hex, 0.12)};border-color:${ktcRgba(hex, 0.35)}">
+        <ha-icon icon="${ktcEsc(g.icon || "mdi:food-steak")}" style="color:${hex}"></ha-icon>
+        <span class="pname">${ktcEsc(T.steak_levels[lvl])}</span>
+        <span class="pmin" id="ktc-steak-${lvl}">${ktcEsc(this._steakText(cm, lvl))}</span>
+      </button>`).join("");
+    return `${g.group ? `<div class="group">${ktcEsc(g.group)}</div>` : ""}
+      <div class="steakrow">
+        <label class="thick">${ktcEsc(T.thickness)}
+          <input id="ktc-thick" type="number" inputmode="decimal" min="1" max="5" step="0.5" value="${ktcEsc(this._thick)}">
+          <span class="unit">cm</span>
+        </label>
+        <div class="grid g3">${btns}</div>
+      </div>
+      <div class="note">${ktcEsc(T.steak_note)}</div>`;
+  }
+
   // ---------- render ----------
   _render() {
     if (!this._config || !this._hass) return;
@@ -459,15 +606,20 @@ class KitchenTimerCard extends HTMLElement {
     // presets
     if (cfg.show_presets !== false) {
       body += this._presets().map((g, gi) => {
+        if (g.type === "steak") return this._steakHtml(g, gi);
         const hex = ktcHex(g.color, "orange");
-        const items = (g.items || []).map((it, ii) => `
+        const more = (g.more || []).length;
+        const open = this._open.has(gi);
+        const shown = open ? this._groupItems(g) : (g.items || []);
+        const items = shown.map((it, ii) => `
           <button class="preset" data-action="preset" data-idx="${gi}.${ii}"
             style="background:${ktcRgba(hex, 0.12)};border-color:${ktcRgba(hex, 0.35)}">
             <ha-icon icon="${ktcEsc(it.icon || g.icon || "mdi:timer-outline")}" style="color:${hex}"></ha-icon>
             <span class="pname">${ktcEsc(it.name)}</span>
             <span class="pmin">${ktcEsc(it.minutes)} ${ktcEsc(T.minutes)}</span>
           </button>`).join("");
-        return `${g.group ? `<div class="group">${ktcEsc(g.group)}</div>` : ""}<div class="grid">${items}</div>`;
+        const toggle = more ? `<button class="more" data-action="more" data-g="${gi}">${ktcEsc(open ? T.less : T.more(more))}<ha-icon icon="${open ? "mdi:chevron-up" : "mdi:chevron-down"}"></ha-icon></button>` : "";
+        return `${g.group || toggle ? `<div class="group">${ktcEsc(g.group || "")}${toggle}</div>` : ""}<div class="grid">${items}</div>`;
       }).join("");
     }
 
@@ -517,6 +669,21 @@ KitchenTimerCard.styles = `
   .group { font-size: 0.8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
     color: var(--secondary-text-color); margin: 14px 2px 8px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); grid-gap: 8px; }
+  .group { display: flex; align-items: center; }
+  .more { margin-left: auto; border: none; background: rgba(127,127,127,0.15); color: var(--primary-text-color);
+    border-radius: 999px; padding: 4px 6px 4px 12px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0; text-transform: none;
+    display: inline-flex; align-items: center; }
+  .more ha-icon { --mdc-icon-size: 18px; margin-left: 2px; }
+  .steakrow { display: grid; grid-template-columns: auto 1fr; grid-gap: 8px; align-items: stretch; }
+  .thick { display: flex; flex-direction: column; justify-content: center; font-size: 0.8rem; color: var(--secondary-text-color);
+    padding: 8px 10px; border-radius: 16px; border: 1px solid rgba(127,127,127,0.35); background: rgba(127,127,127,0.08); }
+  .thick input { font: inherit; font-size: 1.3rem; font-weight: 700; width: 64px; margin: 4px 0 0; padding: 6px 8px; border-radius: 10px;
+    border: 1px solid rgba(127,127,127,0.35); background: rgba(127,127,127,0.10); color: var(--primary-text-color); }
+  .thick .unit { margin-top: 2px; }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .steak .pmin { text-align: center; }
+  .note { font-size: 0.75rem; line-height: 1.35; color: var(--secondary-text-color); margin: 8px 2px 0; }
+  @media (max-width: 420px) { .steakrow { grid-template-columns: 1fr; } .thick { flex-direction: row; align-items: center; gap: 8px; } .thick input { margin: 0; } }
   button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .preset { display: flex; flex-direction: column; align-items: center; justify-content: center;
     padding: 12px 6px; border-radius: 16px; border: 1px solid; color: var(--primary-text-color);

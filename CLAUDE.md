@@ -5,6 +5,7 @@
 - +1/−1 uses `timer.start` with the new remaining duration (HA `timer.change` refuses to exceed the original duration).
 - Finish detection: active → idle transition near `finishes_at` (in `_detectFinished`), plus the countdown reaching 0 in `_tick`. The last known name is kept because automations often clear the name helper at finish.
 - Built-in presets and UI strings live in `KTC_I18N` (en, it).
+- Preset groups: `items` always shown, `more` shown after the group's *more* toggle (`this._open`). A group with `type: "steak"` renders the beef steak row: thickness input + rare/medium/well buttons, minutes per side from `KTC_STEAK` (interpolated, half minutes); one timer of 2 x side, name says when to flip (countdown shows the side time = half). Beef only on purpose (food safety): no rare for pork, chicken or minced meat. Steak times are indicative; change them only with a source.
 - Keep `hacs.json` filename in sync with the JS file name. Bump `KTC_VERSION` and create a GitHub release for every version.
 - The author (Davide) is Italian and a hobbyist: explain things to him in simple Italian.
 - In Davide's Home Assistant the original version lives on the "plancia-frigo" dashboard (#timer popup) with timer.timer_cucina_1..3 and input_text.nome_timer_cucina_1..3; voice alert by automation.timer_cucina_avviso_fine_tempo_sul_tablet.
